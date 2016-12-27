@@ -32,8 +32,8 @@ public class Level1State extends PlayState{
 	@Override
 	public void init() {
 		
-		this.tilemap = new TileMap(30);
-		this.tilemap.loadTiles("/Tilesets/grasstileset.gif");
+		this.tilemap = new TileMap(20);
+		this.tilemap.loadTiles("/Tilesets/grasstileset.png");
 		this.tilemap.loadMap("/Maps/testmap.map");
 		this.tilemap.setPosition(0, 0);
 		this.tilemap.setTween(0.05);
