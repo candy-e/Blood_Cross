@@ -38,7 +38,7 @@ public class Level1State extends PlayState{
 		this.tilemap.setPosition(0, 0);
 		this.tilemap.setTween(0.05);
 		
-		this.bg = new Background("/Backgrounds/grassbg1.gif", -0.1);
+		this.bg = new Background("/Backgrounds/grassbg1.png", -0.1);
 		
 		this.player = new Player(tilemap, 5, 2500, this);
 		this.player.setPosition(100, 100);
