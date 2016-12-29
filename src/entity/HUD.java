@@ -70,10 +70,11 @@ public class HUD {
 	private Paint paint_exp;
 	private BasicStroke stroke_exp;
 	
-	int offsetX_frame_right;
-	int offsetX_radar_bg;
+	private int offsetX_frame_right;
+	private int offsetX_radar_bg;
 	
 	private Font font;
+	
 	
 	public HUD(Player player){
 		this.player = player;
@@ -123,7 +124,8 @@ public class HUD {
 	}
 	
 	public void draw(Graphics2D g){
-	
+		int calculation;
+		
 		g.setPaint(paint_life_bg);
 		g.setStroke(stroke_life_bg);	
 		g.drawLine(174, 39, 521, 39);
@@ -131,42 +133,45 @@ public class HUD {
 		g.setPaint(paint_life);	
 		g.setStroke(stroke_life);	
 		// Fill range 0 to 362 (third parameter)
-		g.fillRoundRect(167, 29, 362, 21, 21, 21);
+		g.fillRoundRect(167, 29, Math.round((362*(player.getHealth()/player.getMaxHealth()))), 21, 21, 21);
 		
 	
+		g.setPaint(Color.WHITE);
+		g.fillRect(163, 61, 312, 8);
+		
 		g.setPaint(paint_mana);
 		g.setStroke(stroke_mana);
 		// Fill range 0 to 312 (third parameter)
 		// g.drawImage(mana_bg, 163, 61, 312, 8, null); // For Animated BG
-		g.fillRect(163, 61, 312, 8);
+		g.fillRect(163, 61, Math.round(312*(player.getEnergy()/player.getMaxEnergy())), 8);
 	
 		
 		g.setPaint(paint_stamina);
 		g.setStroke(stroke_stamina);		
 		// Fill ranges from 0 to 160 (last parameter). -160 us used since angle is drawn clockwise 
-		g.drawArc(12, -2, 141, 141, -53, -160);
+		g.drawArc(12, -2, 141, 141, -53, -(Math.round(160*(player.getStamina()/player.getMaxStamina()))));
 		
 		
 		g.setPaint(Color.WHITE);
-		g.setStroke(stroke_berserk);
 		drawTrapezoid(g, 10, 191, 10, 467, 6, 6, true);
 		
 		g.setPaint(paint_berserk);
 		g.setStroke(stroke_berserk);
 		// Fifth parameter is height, third parameter is y.
-		// TODO: y + (191-CURRENT_HEIGHT) since the bar fills BOTTOM UP
-		drawTrapezoid(g, 10, 191, 10, 467, 6, 6, true);
+		// TODO: y + (467-CURRENT_HEIGHT) since the bar fills BOTTOM UP
+		calculation = Math.round(467*(player.getBerserk()/player.getMaxBerserk()));
+		drawTrapezoid(g, 10, 191+(467-calculation), 10, calculation, 6, 6, true);
 		
 		
 		g.setPaint(Color.WHITE);
-		g.setStroke(stroke_exp);
 		drawTrapezoid(g, 451, 745, 854, 9, 3, 0, false);
 		
 		g.setPaint(paint_exp);
 		g.setStroke(stroke_exp);
 		// Fourth parameter is width, second parameter is x.
 		// TODO: x + (854-CURRENT_WIDTH) since the bar fills up from RIGHT to LEFT
-		drawTrapezoid(g, 451, 745, 854, 9, 3, 0, false);
+		calculation = Math.round(854*(player.getExp()/player.getMaxExp()));
+		drawTrapezoid(g, 451+(854-calculation), 745, calculation, 9, 3, 0, false);
 		
 		
 		g.drawImage(radar_bg, offsetX_radar_bg, 27, null);
@@ -185,6 +190,7 @@ public class HUD {
 //		g.drawString(player.getHealth()+"/"+player.getMaxHealth(), 30, 25);
 //		g.drawString(player.getEnergy()/100 +"/"+player.getMaxEnergy()/100, 30, 45);
 	}
+	
 	
 	public void drawTrapezoid(Graphics2D g, int x, int y, int width, int height, int angle1, int angle2, boolean isVertical) {
 		if(isVertical) {
