@@ -32,6 +32,13 @@ public class HUD {
 	
 	public static final Color mana_PURPLE = new Color(185, 0, 251, 255);
 	public static final Color mana_BLUE = new Color(119, 0, 255, 255);
+	
+	public static final Color berserk_RED = new Color(255, 138, 138, 255);
+	public static final Color berserk_CRIMSON = new Color(185, 23, 52, 255);
+	
+	public static final Color exp_BRONZE = new Color(174, 144, 74, 255);
+	public static final Color exp_GOLD = new Color(238, 210, 124, 255);
+	
 	private Player player;
 	
 	private BufferedImage frame_left;
@@ -56,6 +63,12 @@ public class HUD {
 	
 	private Paint paint_mana;
 	private BasicStroke stroke_mana;	
+	
+	private Paint paint_berserk;
+	private BasicStroke stroke_berserk;
+	
+	private Paint paint_exp;
+	private BasicStroke stroke_exp;
 	
 	int offsetX_frame_right;
 	int offsetX_radar_bg;
@@ -95,6 +108,12 @@ public class HUD {
 //			this.paint_mana = new TexturePaint(mana_bg, new Rectangle(0, 0, 362, 8));
 			this.stroke_mana = new BasicStroke(1);
 			
+			this.paint_berserk = new GradientPaint(0, 0, berserk_RED, 100, 100, berserk_CRIMSON, true);
+			this.stroke_berserk = new BasicStroke(1);
+			
+			this.paint_exp = new GradientPaint(0, 0, exp_BRONZE, 100, 100, exp_GOLD, true);
+			this.stroke_exp = new BasicStroke(1);
+			
 			this.font = new Font("Arial", Font.PLAIN, 14);
 			
 		} catch (Exception e) {
@@ -118,10 +137,8 @@ public class HUD {
 		g.setPaint(paint_mana);
 		g.setStroke(stroke_mana);
 		// Fill range 0 to 312 (third parameter)
-//		g.drawImage(mana_bg, 163, 61, 312, 8, null);
+		// g.drawImage(mana_bg, 163, 61, 312, 8, null); // For Animated BG
 		g.fillRect(163, 61, 312, 8);
-		
-		
 	
 		
 		g.setPaint(paint_stamina);
@@ -129,17 +146,39 @@ public class HUD {
 		// Fill ranges from 0 to 160 (last parameter). -160 us used since angle is drawn clockwise 
 		g.drawArc(12, -2, 141, 141, -53, -160);
 		
-		g.drawImage(radar_bg, offsetX_radar_bg, 27, null);
 		
+		g.setPaint(Color.WHITE);
+		g.setStroke(stroke_berserk);
+		drawTrapezoid(g, 10, 191, 10, 467, 6, 6, true);
+		
+		g.setPaint(paint_berserk);
+		g.setStroke(stroke_berserk);
+		// Fifth parameter is height, third parameter is y.
+		// TODO: y + (191-CURRENT_HEIGHT) since the bar fills BOTTOM UP
+		drawTrapezoid(g, 10, 191, 10, 467, 6, 6, true);
+		
+		
+		g.setPaint(Color.WHITE);
+		g.setStroke(stroke_exp);
+		drawTrapezoid(g, 451, 745, 854, 9, 3, 0, false);
+		
+		g.setPaint(paint_exp);
+		g.setStroke(stroke_exp);
+		// Fourth parameter is width, second parameter is x.
+		// TODO: x + (854-CURRENT_WIDTH) since the bar fills up from RIGHT to LEFT
+		drawTrapezoid(g, 451, 745, 854, 9, 3, 0, false);
+		
+		
+		g.drawImage(radar_bg, offsetX_radar_bg, 27, null);
+
 		g.drawImage(frame_left, 0, 0, null);
 		g.drawImage(frame_right, offsetX_frame_right, 0, null);
 		g.drawImage(frame_face, 31, 17, null);
 		g.drawImage(eye, 49, 35, null);
 		
 
-		drawTrapezoid(g, 10, 191, 10, 467, 6, 6, true);
 		
-		drawTrapezoid(g, 191, 10, 467, 10, 6, 0, false);
+
 		
 		g.setFont(font);
 		
